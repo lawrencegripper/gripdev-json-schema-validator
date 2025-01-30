@@ -1,4 +1,4 @@
-# NewtonsoftJsonSchemaTool
+# GripDev Json Schema Validator
 
 ## Overview
 
