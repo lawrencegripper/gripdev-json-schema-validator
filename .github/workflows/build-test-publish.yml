@@ -28,7 +28,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test --no-restore --verbosity normal
+        run: script/test
 
       - name: Publish CLI tool
         run: dotnet pack --configuration Release --output ./nupkg
