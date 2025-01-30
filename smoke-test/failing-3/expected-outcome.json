@@ -1,0 +1,4 @@
+{
+  "shouldPass": false,
+  "expectedError": "String '12345' does not match regex pattern"
+}

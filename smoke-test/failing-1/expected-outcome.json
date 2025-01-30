@@ -1,0 +1,4 @@
+{
+  "shouldPass": false,
+  "expectedError": "Invalid type. Expected Integer but got String."
+}
