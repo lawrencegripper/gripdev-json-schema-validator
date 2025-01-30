@@ -166,7 +166,7 @@ run_test() {
   local expected_message=$4
 
   echo "Running CLI tool with JSON file: $json_file..."
-  local output=$(GripDevJsonSchemaValidator $schema_file $json_file)
+  local output=$($TOOLPATH $schema_file $json_file)
   echo "Output: $output"
 
   if echo "$output" | grep -q "\"Valid\": $expected_valid"; then
@@ -186,6 +186,11 @@ run_test() {
   fi
 }
 
+echo "Publishing cli tool"
+dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true
+
+TOOLPATH=bin/Release/net8.0/linux-x64/publish/GripDevJsonSchemaValidator
+
 # Run tests for valid JSON files
 for i in "${!JSON_FILES_VALID[@]}"; do
   run_test "${SCHEMA_FILES[$i]}" "${JSON_FILES_VALID[$i]}" "true" ""
@@ -194,6 +199,6 @@ done
 # Run tests for invalid JSON files
 run_test "${SCHEMA_FILES[0]}" "${JSON_FILES_INVALID[0]}" "false" "Invalid type. Expected Integer but got String."
 run_test "${SCHEMA_FILES[1]}" "${JSON_FILES_INVALID[1]}" "false" "Required properties are missing from object: city."
-run_test "${SCHEMA_FILES[2]}" "${JSON_FILES_INVALID[2]}" "false" "Invalid email format. Invalid phone number format."
+run_test "${SCHEMA_FILES[2]}" "${JSON_FILES_INVALID[2]}" "false" "String '12345' does not match regex pattern"
 
 echo "All smoke tests passed."

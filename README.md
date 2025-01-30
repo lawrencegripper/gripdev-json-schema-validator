@@ -2,14 +2,16 @@
 
 ## Overview
 
-NewtonsoftJsonSchemaTool is a dotnet CLI tool for running Newtonsoft schema validation on input JSON schema and files to validate. It returns a JSON array of errors with full details, including line numbers for each error.
+It's a simple wrapper around Newtonsoft.Json.Schema as CLI and PowerShell Module.
+
+
 
 ## Installation
 
 To install the NewtonsoftJsonSchemaTool, use the following command:
 
 ```sh
-dotnet tool install --global NewtonsoftJsonSchemaTool
+dotnet tool install --global GripDevJsonSchemaValidator
 ```
 
 ## Usage
@@ -17,7 +19,7 @@ dotnet tool install --global NewtonsoftJsonSchemaTool
 To use the NewtonsoftJsonSchemaTool, run the following command:
 
 ```sh
-NewtonsoftJsonSchemaTool <schema-file> <json-file>
+GripDevJsonSchemaValidator <schema-file> <json-file>
 ```
 
 Replace `<schema-file>` with the path to your JSON schema file and `<json-file>` with the path to your JSON file to validate.
@@ -52,10 +54,10 @@ Here is an example of how to use the NewtonsoftJsonSchemaTool:
 }
 ```
 
-3. Run the NewtonsoftJsonSchemaTool:
+3. Run the GripDevJsonSchemaValidator:
 
 ```sh
-NewtonsoftJsonSchemaTool schema.json data.json
+GripDevJsonSchemaValidator schema.json data.json
 ```
 
 4. The output will be a JSON array of errors with full details, including line numbers for each error:
@@ -83,7 +85,7 @@ In addition to the dotnet CLI tool, a Powershell module is also available for ru
 To install the Powershell module, use the following command:
 
 ```powershell
-Install-Module -Name NewtonsoftJsonSchemaTool
+Install-Module -Name GripDevJsonSchemaValidator
 ```
 
 ## Usage
@@ -91,7 +93,7 @@ Install-Module -Name NewtonsoftJsonSchemaTool
 To use the Powershell module, import the module and run the `Test-JsonSchema` cmdlet:
 
 ```powershell
-Import-Module NewtonsoftJsonSchemaTool
+Import-Module GripDevJsonSchemaValidator
 
 $schema = Get-Content -Path "schema.json" -Raw
 $json = Get-Content -Path "data.json" -Raw
@@ -110,58 +112,3 @@ if ($errors.Count -eq 0) {
     }
 }
 ```
-
-## Example
-
-Here is an example of how to use the Powershell module:
-
-1. Create a JSON schema file (`schema.json`):
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "age": {
-      "type": "integer"
-    }
-  },
-  "required": ["name", "age"]
-}
-```
-
-2. Create a JSON file to validate (`data.json`):
-
-```json
-{
-  "name": "John Doe",
-  "age": "twenty-five"
-}
-```
-
-3. Run the Powershell module:
-
-```powershell
-Import-Module NewtonsoftJsonSchemaTool
-
-$schema = Get-Content -Path "schema.json" -Raw
-$json = Get-Content -Path "data.json" -Raw
-
-$errors = Test-JsonSchema -Schema $schema -Json $json
-
-if ($errors.Count -eq 0) {
-    Write-Output "JSON is valid."
-} else {
-    Write-Output "JSON is invalid. Errors:"
-    $errors | ForEach-Object {
-        Write-Output "Message: $_.Message"
-        Write-Output "LineNumber: $_.LineNumber"
-        Write-Output "LinePosition: $_.LinePosition"
-        Write-Output "Path: $_.Path"
-    }
-}
-```
-
-4. The output will be a well-typed array of error objects exposing the JSON schema validation error type.
