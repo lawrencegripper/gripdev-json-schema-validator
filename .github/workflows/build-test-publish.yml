@@ -55,4 +55,4 @@ jobs:
         shell: pwsh
         run: |
           Install-Module -Name PowerShellGet -Force -SkipPublisherCheck
-          Publish-Module -Path ./pwsh-module -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_API_KEY }}
+          Publish-Module -Path ./GripDevJsonSchemaValidator -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_API_KEY }}
