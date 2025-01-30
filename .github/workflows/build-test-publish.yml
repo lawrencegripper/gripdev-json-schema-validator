@@ -33,13 +33,26 @@ jobs:
       - name: Publish CLI tool
         run: dotnet pack --configuration Release --output ./nupkg
 
+      - name: Increment version
+        id: increment_version
+        shell: pwsh
+        run: |
+          $moduleManifest = Import-PowerShellDataFile ./pwsh-module/NewtonsoftJsonSchemaTool.psd1
+          $currentVersion = [Version]$moduleManifest.ModuleVersion
+          $newVersion = "{0}.{1}.{2}" -f $currentVersion.Major, $currentVersion.Minor, ($currentVersion.Build + 1)
+          Update-ModuleManifest -Path ./pwsh-module/NewtonsoftJsonSchemaTool.psd1 -ModuleVersion $newVersion
+          
+          $csprojFile = Get-Content ./src/NewtonsoftJsonSchemaTool/NewtonsoftJsonSchemaTool.csproj
+          $csprojFile = $csprojFile -replace '<Version>([0-9]+\.[0-9]+\.[0-9]+)</Version>', "<Version>$newVersion</Version>"
+          Set-Content ./src/NewtonsoftJsonSchemaTool/NewtonsoftJsonSchemaTool.csproj $csprojFile
+
       - name: Publish NuGet package
         if: github.ref == 'refs/heads/main'
         run: |
           dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Publish Powershell module to Powershell Gallery
-        if: github.ref == 'refs/heads/main'
+        shell: pwsh
         run: |
           Install-Module -Name PowerShellGet -Force -SkipPublisherCheck
           Publish-Module -Path ./pwsh-module -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_API_KEY }}
