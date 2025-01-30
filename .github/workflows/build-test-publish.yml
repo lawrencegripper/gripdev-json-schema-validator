@@ -37,14 +37,14 @@ jobs:
         id: increment_version
         shell: pwsh
         run: |
-          $moduleManifest = Import-PowerShellDataFile ./pwsh-module/NewtonsoftJsonSchemaTool.psd1
+          $moduleManifest = Import-PowerShellDataFile ./GripDevJsonSchemaValidator/GripDevJsonSchemaValidator.psd1
           $currentVersion = [Version]$moduleManifest.ModuleVersion
           $newVersion = "{0}.{1}.{2}" -f $currentVersion.Major, $currentVersion.Minor, ($currentVersion.Build + 1)
-          Update-ModuleManifest -Path ./pwsh-module/NewtonsoftJsonSchemaTool.psd1 -ModuleVersion $newVersion
+          Update-ModuleManifest -Path ./GripDevJsonSchemaValidator/GripDevJsonSchemaValidator.psd1 -ModuleVersion $newVersion
           
-          $csprojFile = Get-Content ./src/NewtonsoftJsonSchemaTool/NewtonsoftJsonSchemaTool.csproj
+          $csprojFile = Get-Content ./GripDevJsonSchemaValidator.csproj
           $csprojFile = $csprojFile -replace '<Version>([0-9]+\.[0-9]+\.[0-9]+)</Version>', "<Version>$newVersion</Version>"
-          Set-Content ./src/NewtonsoftJsonSchemaTool/NewtonsoftJsonSchemaTool.csproj $csprojFile
+          Set-Content ./GripDevJsonSchemaValidator.csproj $csprojFile
 
       - name: Publish NuGet package
         if: github.ref == 'refs/heads/main'
