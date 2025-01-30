@@ -55,7 +55,7 @@ Set-Location $PSScriptRoot
 Set-Location ..
 
 # Import the module from the local directory`
-Import-Module (Join-Path $PSScriptRoot "../pwsh-module/GripDevJsonSchemaValidator.psd1")
+Import-Module (Join-Path $PSScriptRoot "../GripDevJsonSchemaValidator/GripDevJsonSchemaValidator.psd1")
 
 # Run all tests by walking the smoke-test directory
 $testDirs = Get-ChildItem -Directory -Path "smoke-test"

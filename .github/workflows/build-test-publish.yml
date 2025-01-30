@@ -23,29 +23,23 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
-        working-directory: src/NewtonsoftJsonSchemaTool
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
-        working-directory: src/NewtonsoftJsonSchemaTool
 
       - name: Run tests
         run: dotnet test --no-restore --verbosity normal
-        working-directory: src/NewtonsoftJsonSchemaTool
 
       - name: Publish CLI tool
         run: dotnet pack --configuration Release --output ./nupkg
-        working-directory: src/NewtonsoftJsonSchemaTool
 
-      - name: Upload CLI tool to GitHub Releases
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./nupkg/NewtonsoftJsonSchemaTool.1.0.0.nupkg
-          asset_name: NewtonsoftJsonSchemaTool.1.0.0.nupkg
-          asset_content_type: application/zip
+      - name: Publish NuGet package
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Publish Powershell module to Powershell Gallery
+        if: github.ref == 'refs/heads/main'
         run: |
           Install-Module -Name PowerShellGet -Force -SkipPublisherCheck
-          Publish-Module -Path ./src/NewtonsoftJsonSchemaTool -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_API_KEY }}
+          Publish-Module -Path ./pwsh-module -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_API_KEY }}

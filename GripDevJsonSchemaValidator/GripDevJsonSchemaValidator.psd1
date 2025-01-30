@@ -10,22 +10,22 @@
     ModuleVersion = '1.0.0'
 
     # ID used to uniquely identify this module
-    GUID = '12345678-1234-1234-1234-123456789012'
+    GUID = 'bf69c3af-6d3d-41c7-a51e-b2b87be738d3'
 
     # Author of this module
-    Author = 'YourName'
+    Author = 'Lawrence Gripper'
 
     # Company or vendor of this module
-    CompanyName = 'YourCompany'
+    CompanyName = 'GripDev'
 
     # Copyright statement for this module
-    Copyright = '(c) 2023 YourCompany. All rights reserved.'
+    Copyright = '(c) 2025 YourCompany. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description = 'A Powershell module for running Newtonsoft schema validation on input JSON schema and files to validate.'
 
     # Minimum version of the Windows PowerShell engine required by this module
-    PowerShellVersion = '5.1'
+    PowerShellVersion = '7.4'
 
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules = @()

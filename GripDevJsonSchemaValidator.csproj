@@ -5,17 +5,23 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>GripDevJsonSchemaValidator</RootNamespace>
     <AssemblyName>GripDevJsonSchemaValidator</AssemblyName>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>GripDevJsonSchemaValidator</PackageId>
     <PackageVersion>1.0.0</PackageVersion>
-    <Authors>YourName</Authors>
-    <Description>A CLI tool for running Newtonsoft schema validation on input JSON schema and files to validate.</Description>
+    <Authors>Lawrence Gripper</Authors>
+    <Description>A CLI tool for running Newtonsoft Json Schema validation.</Description>
     <PackageTags>json schema validation cli</PackageTags>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>gripdev-jsonschema</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.16" />
+    <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
