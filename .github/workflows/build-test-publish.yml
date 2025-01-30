@@ -23,15 +23,19 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
+        working-directory: src/NewtonsoftJsonSchemaTool
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
+        working-directory: src/NewtonsoftJsonSchemaTool
 
       - name: Run tests
         run: dotnet test --no-restore --verbosity normal
+        working-directory: src/NewtonsoftJsonSchemaTool
 
       - name: Publish CLI tool
         run: dotnet pack --configuration Release --output ./nupkg
+        working-directory: src/NewtonsoftJsonSchemaTool
 
       - name: Upload CLI tool to GitHub Releases
         uses: actions/upload-release-asset@v1
