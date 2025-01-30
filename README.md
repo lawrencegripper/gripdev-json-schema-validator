@@ -114,10 +114,7 @@ To use the Powershell module, import the module and run the `Test-JsonSchema` cm
 ```powershell
 Import-Module GripDevJsonSchemaValidator
 
-$schema = Get-Content -Path "schema.json" -Raw
-$json = Get-Content -Path "data.json" -Raw
-
-$errors = Test-JsonSchema -Schema $schema -Json $json
+$errors = Test-JsonSchema -SchemaPath ./some/schema.json -JsonPath ./data.json
 
 if ($errors.Count -eq 0) {
     Write-Output "JSON is valid."
