@@ -30,22 +30,10 @@ namespace GripDevJsonSchemaValidator
                 IList<ValidationError> errors;
                 bool valid = json.IsValid(schema, out errors);
 
-                var errorDetails = new List<object>();
-                foreach (var error in errors)
-                {
-                    errorDetails.Add(new
-                    {
-                        Message = error.Message,
-                        LineNumber = error.LineNumber,
-                        LinePosition = error.LinePosition,
-                        Path = error.Path
-                    });
-                }
-
                 var result = new
                 {
                     Valid = valid,
-                    Errors = errorDetails
+                    Errors = errors
                 };
 
                 string output = JToken.FromObject(result).ToString();

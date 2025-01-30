@@ -1,0 +1,4 @@
+{
+  "shouldPass": false,
+  "expectedError": "Required properties are missing from object: city."
+}

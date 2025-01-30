@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e 
+
+cd "$(dirname "$0")"
+cd ..
+
+./smoke-test/cli.sh
+
+pwsh ./smoke-test/powershell.ps1
