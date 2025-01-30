@@ -2,9 +2,28 @@
 
 ## Overview
 
-It's a simple wrapper around Newtonsoft.Json.Schema as CLI and PowerShell Module.
+A simple wrapper around Newtonsoft.Json.Schema as CLI or PowerShell Module.
 
+It gives full details about the line, position, value, schemaid for any schema errors, for example:
 
+```
+{
+  "Valid": false,
+  "Errors": [
+    {
+      "Message": "String '12345' does not match regex pattern '^[0-9]{10}$'.",
+      "LineNumber": 10,
+      "LinePosition": 20,
+      "Path": "contact.phone",
+      "Value": "12345",
+      "SchemaId": "#/properties/contact/properties/phone",
+      "SchemaBaseUri": null,
+      "ErrorType": "pattern",
+      "ChildErrors": []
+    }
+  ]
+}
+```
 
 ## Installation
 
@@ -95,10 +114,7 @@ To use the Powershell module, import the module and run the `Test-JsonSchema` cm
 ```powershell
 Import-Module GripDevJsonSchemaValidator
 
-$schema = Get-Content -Path "schema.json" -Raw
-$json = Get-Content -Path "data.json" -Raw
-
-$errors = Test-JsonSchema -Schema $schema -Json $json
+$errors = Test-JsonSchema -SchemaPath ./some/schema.json -JsonPath ./data.json
 
 if ($errors.Count -eq 0) {
     Write-Output "JSON is valid."
