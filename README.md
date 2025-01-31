@@ -4,13 +4,16 @@
 
 A simple wrapper around Newtonsoft.Json.Schema as CLI or PowerShell Module.
 
-It gives full details about the line, position, value, schemaid for any schema errors, for example:
+It gives full details about the line, position, value, schemaid for any schema errors
+
+As JSON scripts:
 
 ```
 {
   "Valid": false,
   "Errors": [
     {
+      "UserMessage": "\n❌ Error Details:\n   └─ Message: Required properties are missing from object: city.\n   └─ Location: Line 4, Position 14\n   └─ Path: address\n   └─ "
       "Message": "String '12345' does not match regex pattern '^[0-9]{10}$'.",
       "LineNumber": 10,
       "LinePosition": 20,
@@ -23,6 +26,41 @@ It gives full details about the line, position, value, schemaid for any schema e
     }
   ]
 }
+```
+
+Or Pretty printed output for users 👀 even handling `if-then-else` and sub errors nicely!
+
+```
+ ❌ Error Details:
+   └─ Message: JSON does not match schema from 'then'.
+   └─ Location: Line 151, Position 14
+   └─ Path: mingw
+   └─ Value: 
+   └─ Related Issues:
+      ↳ Required properties are missing from object: pinnedDetails.
+```
+
+You can easily use this to output annotations onto files during Pull Requests, for example, with GitHub Actions. The `Write-Host ::error` line tells actions to add an annotation with the user message to the right file and line.
+
+```pwsh
+    $validationResult = Test-JsonSchema -SchemaPath $schemaFilePath -JsonPath $file.FullName -PrettyPrint $false
+
+    if ($validationResult.Valid) {
+        Write-Host "✅ JSON is valid." -ForegroundColor Green
+    } else {
+        # File has been modified since the commit, enforce validation
+        $toolsetHasErrors = $true
+        Write-Host "`n❌ JSON validation failed!" -ForegroundColor Red
+        Write-Host "   Found the following errors:`n" -ForegroundColor Yellow
+
+        $validationResult.Errors | ForEach-Object {
+            Write-Host $_.UserMessage
+            if ($env:GITHUB_ACTIONS -eq 'true') {
+                Write-Host "Adding annotation"
+                Write-Host "::error file=$($file.Name),line=$($_.LineNumber)::$($_.UserMessage.Replace("`n", '%0A'))"
+            }
+        }
+    }
 ```
 
 ## Installation
