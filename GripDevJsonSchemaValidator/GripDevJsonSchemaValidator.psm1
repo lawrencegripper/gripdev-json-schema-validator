@@ -13,7 +13,10 @@ function Test-JsonSchema {
         [string]$SchemaPath,
 
         [Parameter(Mandatory = $true)]
-        [string]$JsonPath
+        [string]$JsonPath,
+
+        [Parameter(Mandatory = $false)]
+        [bool]$PrettyPrint = $true
     )
 
     $schemaContent = Get-Content -Path $SchemaPath -Raw
@@ -24,6 +27,32 @@ function Test-JsonSchema {
     $errors = New-Object System.Collections.Generic.List[Newtonsoft.Json.Schema.ValidationError]
 
     $valid = [NewtonSoft.Json.Schema.SchemaExtensions]::IsValid($jsonContent, $schema, [ref]$errors)
+
+    if ($PrettyPrint) {
+        if ($valid) {
+            Write-Host "✅ JSON is valid." -ForegroundColor Green
+        }
+        else {
+            Write-Host "`n❌ JSON validation failed!" -ForegroundColor Red
+            Write-Host "   Found the following errors:`n" -ForegroundColor Yellow
+        
+            $errors | ForEach-Object {
+                Write-Host "   Error Details:" -ForegroundColor Magenta
+                Write-Host "   └─ Message: $($_.Message)" -ForegroundColor White
+                Write-Host "   └─ Location: Line $($_.LineNumber), Position $($_.LinePosition)" -ForegroundColor Gray
+                Write-Host "   └─ Path: $($_.Path)" -ForegroundColor Gray
+                Write-Host "   └─ Value: $($_.Value)" -ForegroundColor Gray
+            
+                if ($_.ChildErrors) {
+                    Write-Host "   └─ Related Issues:" -ForegroundColor Yellow
+                    $_.ChildErrors | ForEach-Object {
+                        Write-Host "      ↳ $($_.Message)" -ForegroundColor DarkYellow
+                    }
+                }
+                Write-Host ""
+            }
+        }
+    }
 
     $errorDetails = [System.Collections.Generic.List[PSCustomObject]]::new()
     foreach ($error in $errors) {
