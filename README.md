@@ -63,6 +63,8 @@ You can easily use this to output annotations onto files during Pull Requests, f
     }
 ```
 
+Big shout out to [James King (Newtonsoft)](https://www.newtonsoft.com/jsonschema) for the heavy lifting here using the [AGPL version of his library](https://www.nuget.org/packages/Newtonsoft.Json.Schema/4.0.1/License). See pricing for non agpl version on their site.
+
 ## Installation
 
 To install the NewtonsoftJsonSchemaTool, use the following command:
@@ -173,4 +175,3 @@ if ($validationResult.Valid) {
 }
 ```
 
-Big shout out to [James King (Newtonsoft)](https://www.newtonsoft.com/jsonschema) for the heavy lifting here using the [AGPL version of his library](https://www.nuget.org/packages/Newtonsoft.Json.Schema/4.0.1/License).
