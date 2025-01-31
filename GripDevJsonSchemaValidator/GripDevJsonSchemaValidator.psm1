@@ -27,7 +27,6 @@ function Test-JsonSchema {
 
     $errorDetails = [System.Collections.Generic.List[PSCustomObject]]::new()
     foreach ($error in $errors) {
-        Write-Host $error.Message
         $errorDetails += [PSCustomObject]@{
             Message       = $error.Message
             LineNumber    = $error.LineNumber
