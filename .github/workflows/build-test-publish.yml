@@ -39,7 +39,7 @@ jobs:
         run: |
           $moduleManifest = Import-PowerShellDataFile ./GripDevJsonSchemaValidator/GripDevJsonSchemaValidator.psd1
           $currentVersion = [Version]$moduleManifest.ModuleVersion
-          $newVersion = "{0}.{1}.{2}" -f $currentVersion.Major, $currentVersion.Minor, ($currentVersion.Build + 1)
+          $newVersion = "{0}.{1}.{2}" -f $currentVersion.Major, $currentVersion.Minor, $env:GITHUB_RUN_NUMBER
           Update-ModuleManifest -Path ./GripDevJsonSchemaValidator/GripDevJsonSchemaValidator.psd1 -ModuleVersion $newVersion
           
           $csprojFile = Get-Content ./GripDevJsonSchemaValidator.csproj
