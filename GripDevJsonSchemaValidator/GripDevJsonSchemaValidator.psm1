@@ -28,36 +28,43 @@ function Test-JsonSchema {
 
     $valid = [NewtonSoft.Json.Schema.SchemaExtensions]::IsValid($jsonContent, $schema, [ref]$errors)
 
-    if ($PrettyPrint) {
-        if ($valid) {
-            Write-Host "✅ JSON is valid." -ForegroundColor Green
-        }
-        else {
-            Write-Host "`n❌ JSON validation failed!" -ForegroundColor Red
-            Write-Host "   Found the following errors:`n" -ForegroundColor Yellow
-        
-            $errors | ForEach-Object {
-                Write-Host "   Error Details:" -ForegroundColor Magenta
-                Write-Host "   └─ Message: $($_.Message)" -ForegroundColor White
-                Write-Host "   └─ Location: Line $($_.LineNumber), Position $($_.LinePosition)" -ForegroundColor Gray
-                Write-Host "   └─ Path: $($_.Path)" -ForegroundColor Gray
-                Write-Host "   └─ Value: $($_.Value)" -ForegroundColor Gray
+    $userErrorMessages = @()
+    
+    if ($valid) {
+        Write-Host "✅ JSON is valid." -ForegroundColor Green
+    }
+    else {
+        Write-Host "`n❌ JSON validation failed!" -ForegroundColor Red
+        Write-Host "   Found the following errors:`n" -ForegroundColor Yellow
+    
+        $errors | ForEach-Object {
+            $errorMessage = "`n❌ Error Details:`n"
+            $errorMessage += "   └─ Message: $($_.Message)`n"
+            $errorMessage += "   └─ Location: Line $($_.LineNumber), Position $($_.LinePosition)`n"
+            $errorMessage += "   └─ Path: $($_.Path)`n"
+            $errorMessage += "   └─ Value: $($_.Value)"
             
-                if ($_.ChildErrors) {
-                    Write-Host "   └─ Related Issues:" -ForegroundColor Yellow
-                    $_.ChildErrors | ForEach-Object {
-                        Write-Host "      ↳ $($_.Message)" -ForegroundColor DarkYellow
-                    }
+            if ($_.ChildErrors) {
+                $errorMessage += "`n   └─ Related Issues:"
+                $_.ChildErrors | ForEach-Object {
+                    $errorMessage += "`n      ↳ $($_.Message)"
                 }
-                Write-Host ""
+            }
+
+            $userErrorMessages += $errorMessage
+
+            if ($PrettyPrint) {
+                Write-Host $errorMessage
             }
         }
     }
 
     $errorDetails = [System.Collections.Generic.List[PSCustomObject]]::new()
+    $i = 0
     foreach ($error in $errors) {
         $errorDetails += [PSCustomObject]@{
             Message       = $error.Message
+            UserMessage   = $userErrorMessages[$i]
             LineNumber    = $error.LineNumber
             LinePosition  = $error.LinePosition
             Path          = $error.Path
@@ -68,6 +75,7 @@ function Test-JsonSchema {
             ErrorType     = $error.ErrorType
             ChildErrors   = $error.ChildErrors
         }
+        $i++
     }
 
     return [PSCustomObject]@{

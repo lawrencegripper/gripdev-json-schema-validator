@@ -27,6 +27,10 @@ function Run-Test {
     Write-Host "Running PowerShell module with JSON file: $jsonFile..."
     $result = Test-JsonSchema -SchemaPath $schemaFile -JsonPath $jsonFile
 
+    $result.Errors | ForEach-Object {
+        Write-Host "Error: $($_.UserMessage)"
+    }
+
     if ($result.Valid -eq $shouldPass) {
         if (-not $shouldPass -and $expectedError) {
             $errorFound = $false
