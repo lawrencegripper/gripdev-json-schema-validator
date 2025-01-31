@@ -127,9 +127,10 @@ if ($validationResult.Valid) {
                 Write-Output "  Child Error: $($_.Message)"
             }
         }
-        Write-Output "LineNumber: $_.LineNumber"
-        Write-Output "LinePosition: $_.LinePosition"
-        Write-Output "Path: $_.Path"
+        Write-Output "LineNumber: $($_.LineNumber)"
+        Write-Output "LinePosition: $($_.LinePosition)"
+        Write-Output "Path: $($_.Path)"
+        Write-Output "Value: $($_.Value)"
     }
 }
 ```
