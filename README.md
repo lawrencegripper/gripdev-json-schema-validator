@@ -172,3 +172,5 @@ if ($validationResult.Valid) {
     }
 }
 ```
+
+Big shout out to [James King (Newtonsoft)](https://www.newtonsoft.com/jsonschema) for the heavy lifting here using the [AGPL version of his library](https://www.nuget.org/packages/Newtonsoft.Json.Schema/4.0.1/License).
