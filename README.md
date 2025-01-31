@@ -114,14 +114,19 @@ To use the Powershell module, import the module and run the `Test-JsonSchema` cm
 ```powershell
 Import-Module GripDevJsonSchemaValidator
 
-$errors = Test-JsonSchema -SchemaPath ./some/schema.json -JsonPath ./data.json
+$validationResult = Test-JsonSchema -SchemaPath ./some/schema.json -JsonPath ./data.json
 
-if ($errors.Count -eq 0) {
+if ($validationResult.Valid) {
     Write-Output "JSON is valid."
 } else {
     Write-Output "JSON is invalid. Errors:"
-    $errors | ForEach-Object {
-        Write-Output "Message: $_.Message"
+    $validationResult.Errors | ForEach-Object {
+        Write-Output "Message: $($_.Message)"
+        if ($_.ChildErrors) {
+            $_.ChildErrors | ForEach-Object {
+                Write-Output "  Child Error: $($_.Message)"
+            }
+        }
         Write-Output "LineNumber: $_.LineNumber"
         Write-Output "LinePosition: $_.LinePosition"
         Write-Output "Path: $_.Path"
