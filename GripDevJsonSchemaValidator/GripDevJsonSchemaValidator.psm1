@@ -31,11 +31,11 @@ function Test-JsonSchema {
     $userErrorMessages = @()
     
     if ($valid) {
-        Write-Host "✅ JSON is valid." -ForegroundColor Green
+        if ($PrettyPrint) { Write-Host "✅ JSON is valid." -ForegroundColor Green }
     }
     else {
-        Write-Host "`n❌ JSON validation failed!" -ForegroundColor Red
-        Write-Host "   Found the following errors:`n" -ForegroundColor Yellow
+        if ($PrettyPrint) { Write-Host "`n❌ JSON validation failed!" -ForegroundColor Red }
+        if ($PrettyPrint) { Write-Host "   Found the following errors:`n" -ForegroundColor Yellow }
     
         $errors | ForEach-Object {
             $errorMessage = "`n❌ Error Details:`n"
